@@ -314,27 +314,17 @@ Product_Id | Product_Name | Quantity | Modified_At | Is_Active
 
 ## 🐛 Challenges & Solutions
 
-### Challenge 1: "Dataset not found in location US"
-**Symptom:** Query fails with location error  
-**Root Cause:** Wrong dataset name or region mismatch  
-**Solution:** Use fully qualified names (`project.dataset.table`) and match query location to dataset location
-
-### Challenge 2: "Unrecognized name: now_dt"
-**Symptom:** Variables not found during execution  
-**Root Cause:** BigQuery variables require running entire script, not highlighted portions  
-**Solution:** Run complete script from top, or replace variables with `CURRENT_DATE()`
-
-### Challenge 3: "No history being created"
+### Challenge 1: "No history being created"
 **Symptom:** Dimension shows only latest snapshot, no versions  
 **Root Cause:** Loading only current state doesn't create changes to track  
 **Solution:** Process by `load_date` incrementally or replay in chronological order
 
-### Challenge 4: "Incorrect active flags and dates"
+### Challenge 2: "Incorrect active flags and dates"
 **Symptom:** Old rows stay active, new rows inactive, dates overlap  
 **Root Cause:** Processing multiple dates simultaneously without proper sequencing  
 **Solution:** Reset dimension, replay all load_dates sequentially with loop
 
-### Challenge 5: "MERGE matched row multiple times"
+### Challenge 3: "MERGE matched row multiple times"
 **Symptom:** BigQuery MERGE fails with duplicate match error  
 **Root Cause:** Staging data not deduplicated or multiple active rows per product  
 **Solution:** Dedupe `stg_run` per product per batch, ensure one active row per key
@@ -544,22 +534,7 @@ AS SELECT * FROM scd_demo.dim_product;
 - Dedupe staging before processing
 - Monitor for products with excessive versions (data quality issue)
 
-**Tested Scale:**
-- ✅ 500K+ products
-- ✅ 10M+ dimension rows
-- ✅ 50K daily updates
-- ✅ Sub-second point-in-time queries
 
-## 🎓 What You'll Learn
-
-By studying this project, you'll master:
-
-- ✅ **SCD Type 2 theory** and practical implementation
-- ✅ **Temporal data modeling** and why order matters
-- ✅ **BigQuery MERGE mechanics** and common pitfalls
-- ✅ **Incremental vs snapshot loading** patterns
-- ✅ **Data validation** and audit query techniques
-- ✅ **Production warehousing patterns** used at scale (Airbnb, Netflix, Spotify)
 
 
 ⭐ Star this repo if you found it helpful!
